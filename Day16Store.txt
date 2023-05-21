@@ -1,0 +1,82 @@
+CREATE DATABASE store;
+
+
+CREATE TABLE countries (
+    code int primary key ,
+    name varchar(20) unique ,
+    continent_name varchar(20) not null
+    );
+
+
+CREATE TABLE users (
+  id int primary key ,
+  full_name varchar(20) not null,
+  email varchar(20) unique ,
+  gender char(1) not null check (gender IN ('m', 'f')),
+  date_of_birth varchar(15),
+  created_at datetime DEFAULT CURRENT_TIMESTAMP,
+  country_code int not null ,
+  foreign key (country_code) references countries(code)
+);
+
+CREATE TABLE orders (
+  id int primary key ,
+  user_id int not null ,
+  status varchar(6)not null check(status IN ('start', 'finish')),
+  created_at datetime DEFAULT CURRENT_TIMESTAMP,
+  foreign key (user_id) references users(id)
+);
+
+CREATE TABLE order_products (
+  order_id int ,
+  product_id int  ,
+  quantity int default 0,
+  foreign key (product_id) references products(id),
+  foreign key (order_id) references orders(id)
+);
+
+CREATE TABLE products (
+  id int primary key ,
+  name varchar(10) not null ,
+  price int default 0,
+  status VARCHAR(10) not null check (status IN ('valid', 'expired')),
+  created_at datetime DEFAULT CURRENT_TIMESTAMP
+);
+
+insert into countries (code, name, continent_name)
+values (2,'Canada','North America');
+
+insert into users(id, full_name, email, gender, date_of_birth, created_at, country_code)
+values (2,'sara ahmed','sara@gmail.com','f','1999-03-05',NOW(),2);
+
+insert into orders(id, user_id, status)
+values (2,2,'start');
+
+insert into products(id, name, price, status, created_at)
+values (2,'p1',20,'valid',NOW());
+
+insert into products(id, name, price, status, created_at)
+values (5,'p4',46,'expired',NOW());
+
+insert into order_products(order_id, product_id,quantity)
+values (2,2,4);
+
+update countries set name = 'America' where code=2;
+
+delete from order_products
+where product_id=2;
+
+delete from products where id=2;
+
+select * from countries;
+
+select * from users;
+
+select * from orders;
+
+select * from products;
+
+select * from order_products;
+
+
+
